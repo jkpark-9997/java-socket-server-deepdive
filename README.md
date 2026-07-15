@@ -19,7 +19,7 @@ Spring Boot 같은 웹 프레임워크의 내부 동작 원리를 깊이 있게 
 **1. 메모리 방어와 GC(Garbage Collector) 정상화**
 스레드 풀 도입 후 가장 큰 변화는 메모리의 안정성입니다. 아래 프로파일러 그래프에서 보이듯, 무한정 치솟던 메모리가 규칙적인 톱니바퀴 형태를 띠게 되었습니다. 이를 통해 메모리가 차오르더라도 자바의 GC가 정상적으로 개입하여 시스템을 안정적으로 청소 및 유지하고 있다는 것을 확인했습니다.
 
-![GC Sawtooth Memory](image/gc-sawtooth-memory.png)
+![GC Sawtooth Memory](image/ab-test-heap.png)
 
 **2. 가용성과 지연 시간의 Trade-off 증명**
 동일하게 500개의 동시 접속 트래픽(총 1000개 요청)을 발생시킨 결과입니다. 
@@ -27,4 +27,4 @@ Spring Boot 같은 웹 프레임워크의 내부 동작 원리를 깊이 있게 
 
 이를 통해 무한 스레드를 통한 '서버 다운(가용성 상실)'이라는 최악의 결과를 피하는 대신, '클라이언트 대기 시간 증가'라는 트레이드오프를 선택한 올바른 결정임을 확인했습니다. 또한, 서버를 다운시키지 않으면서 응답시간을 최소화 할 수 있는 최적의 스레드 풀 사이즈 설정이 중요한 과제임을 인지할 수 있었습니다.
 
-![AB Test Success](image/ab-test-success.jpg)
+![AB Test Success](image/ab-test-success.png)
