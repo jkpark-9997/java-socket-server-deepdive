@@ -1,20 +1,21 @@
 package org.jaekwang.server;
 
+import org.jaekwang.server.http.HttpRequest;
+import org.jaekwang.server.http.HttpResponse;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class UserController implements Controller  {
-    public void process(Socket socket) throws IOException {
-        OutputStream out = socket.getOutputStream();
-        PrintWriter writer = new PrintWriter(out, true);
+    public void process(HttpRequest request, HttpResponse response) throws IOException {
+            System.out.println(request.getMethod()+"------"+request.getUri());
+            response.sendOk("<h1>sendOK method perfectly running</h1>");
 
-        writer.println("HTTP/1.1 200 OK");
-        writer.println("Content-Type: text/html");
+            //쿼리 파라미터 파싱 테스트 로직
 
-        writer.println();
+            System.out.println("User ID : " +request.getQueryParameter("id"));
+            System.out.println("User Name : " +request.getQueryParameter("name"));
+            System.out.println("User Email : " +request.getQueryParameter("email"));
+            System.out.println("User Role : " +request.getQueryParameter("role"));
 
-        writer.println("<html><body><h1>This is user page!</h1></body></html>");
     }
 }
