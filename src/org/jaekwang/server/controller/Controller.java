@@ -1,4 +1,4 @@
-package org.jaekwang.server;
+package org.jaekwang.server.controller;
 
 import org.jaekwang.server.http.HttpRequest;
 import org.jaekwang.server.http.HttpResponse;
