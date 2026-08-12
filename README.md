@@ -57,3 +57,17 @@ Spring Boot 같은 웹 프레임워크의 내부 동작 원리를 깊이 있게 
 - 브라우저가 백그라운드에서 자동으로 요청하는 `/favicon.ico` 등의 비정상 URI 요청을 HashMap 조회 시 `null` 체크를 통해 안전하게 걸러내어, 스레드 종료 및 서버 다운을 방어하는 로직을 추가했습니다.
 
 ---
+## 객체 지향적 HTTP Request/Response 처리와 관심사 분리(Phase 5)
+### Problem: 네트워크 I/O와 비즈니스 로직의 강한 결합 및 단일 책임 원칙 위배
+기존 구조에서는 Controller가 직접 Socket 객체를 전달받아 처리하므로, 순수 비즈니스 로직이 네트워크 계층의 세부 구현에 강하게 종속되는 문제가 있었습니다. 또한, WebServer 클래스 내부의 DispatchRequest 라는 거대한 
+메서드에서 스트림 개방, 문자열 파싱, 라우팅을 모두 수행하여 단일 책임 원칙을 크게 위배하고 있었습니다.
+
+### Solution & Insight : Servlet 패턴 적용을 통한 책임 분리와 캡슐화
+Java Servlet의 동작 방식을 모티브로 삼아, 비즈니스 로직과 HTTP 프로토콜 파싱/응답 책임을 완벽히 분리하기 위해 HttpRequest와 HttpResponse 객체를 도입했습니다.
+1. **HttpRequest 클래스 도입**
+    - Socket의 InputStream을 주입받아 HTTP Method, URI, 쿼리 파라미터, 헤더를 파싱하고 내부 Map 구조로 캡슐화하여 제공합니다.
+2. **HttpResponse 클래스 도입**
+    - Socket의 OutputStream을 감싸고, sendOk, sendNotFound 등 상태 코드에 맞는 표준 HTTP 응답 텍스트 생성 로직을 도입했습니다.
+
+*Insight: 관심사 분리*
+- Controller는 전달받은 요청 데이터의 처리와 응답에만 집중할 수 있게 되었습니다. WebServer도 라우팅 역할만 수행하는 프론트 컨트롤러로 역할이 변경되어 시스템의 응집도는 높아지고 결합도는 낮아졌습니다.
