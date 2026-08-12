@@ -1,5 +1,9 @@
 package org.jaekwang.server;
 
+import org.jaekwang.server.controller.Controller;
+import org.jaekwang.server.controller.CouponController;
+import org.jaekwang.server.controller.CouponStatusController;
+import org.jaekwang.server.controller.UserController;
 import org.jaekwang.server.http.HttpRequest;
 import org.jaekwang.server.http.HttpResponse;
 
@@ -15,12 +19,14 @@ import java.util.concurrent.Executors;
 
 public class WebServer {
 
-    private static final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private static final ExecutorService threadPool = Executors.newFixedThreadPool(100);
 
     static final Map<String, Controller> controlMap = new HashMap<>();
 
     static {
         controlMap.put("/user", new UserController());
+        controlMap.put("/coupon", new CouponController());
+        controlMap.put("/coupon/status", new CouponStatusController());
     }
 
     public static void main(String[] args) throws IOException {
@@ -62,7 +68,7 @@ public class WebServer {
 
     public static Socket acceptConnection(ServerSocket serverSocket) throws IOException {
         Socket socket = serverSocket.accept();
-        System.out.println("Accepted connection from " + socket.getInetAddress().getHostName());
+        //System.out.println("Accepted connection from " + socket.getInetAddress().getHostName());
         return socket;
     }
 }

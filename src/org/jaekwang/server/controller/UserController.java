@@ -1,11 +1,12 @@
-package org.jaekwang.server;
+package org.jaekwang.server.controller;
 
 import org.jaekwang.server.http.HttpRequest;
 import org.jaekwang.server.http.HttpResponse;
 
 import java.io.IOException;
 
-public class UserController implements Controller  {
+public class UserController implements Controller {
+    @Override
     public void process(HttpRequest request, HttpResponse response) throws IOException {
             System.out.println(request.getMethod()+"------"+request.getUri());
             response.sendOk("<h1>sendOK method perfectly running</h1>");
