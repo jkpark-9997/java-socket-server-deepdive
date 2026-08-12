@@ -1,8 +1,10 @@
 package org.jaekwang.server;
 
+import org.jaekwang.server.http.HttpRequest;
+import org.jaekwang.server.http.HttpResponse;
+
 import java.io.IOException;
-import java.net.Socket;
 
 public interface Controller {
-    public  void process(Socket socket) throws IOException;
+    public  void process(HttpRequest request, HttpResponse response) throws IOException;
 }
